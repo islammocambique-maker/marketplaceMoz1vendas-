@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Caixa & Stock</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2pdf.js para exportação PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body class="bg-gray-100 font-sans text-gray-800">
+
+    <!-- Modal de Acesso ao Stock (Código PIN: 223344) -->
+    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-6 rounded-xl shadow-xl w-80">
+            <h3 class="text-lg font-bold mb-4 text-center">Acesso ao Gestor de Stock</h3>
+            <p class="text-xs text-gray-500 mb-4 text-center">Digite o código de autorização</p>
+            <input type="password" id="stockPinInput" placeholder="Código PIN" class="w-full border p-2 rounded mb-4 text-center text-lg tracking-widest outline-none focus:ring-2 focus:ring-blue-500">
+            <div class="flex justify-end gap-2">
+                <button onclick="closeAuthModal()" class="px-4 py-2 bg-gray-200 rounded text-sm hover:bg-gray-300">Cancelar</button>
+                <button onclick="verifyPin()" class="px-4 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">Entrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Layout Principal -->
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- Sidebar / Navegação -->
+        <aside class="w-64 bg-slate-900 text-white flex flex-col justify-between p-4">
+            <div>
+                <div class="flex items-center gap-3 mb-8 px-2">
+                    <i class="fa-solid fa-cash-register text-2xl text-blue-400"></i>
+                    <h1 class="text-xl font-bold tracking-wide">Caixa & Stock</h1>
+                </div>
+
+                <nav class="space-y-2">
+                    <button onclick="switchTab('pos')" id="tab-pos" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-600 text-white font-medium transition">
+                        <i class="fa-solid fa-cart-shopping"></i> Ponto de Venda
+                    </button>
+                    <button onclick="switchTab('stock')" id="tab-stock" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 text-gray-300 transition">
+                        <i class="fa-solid fa-boxes-stacked"></i> Stock & Produtos
+                    </button>
+                    <button onclick="switchTab('reports')" id="tab-reports" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 text-gray-300 transition">
+                        <i class="fa-solid fa-chart-line"></i> Relatórios
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Configuração do Endpoint Apps Script -->
+            <div class="p-3 bg-slate-800 rounded-lg text-xs space-y-2">
+                <label class="block font-semibold text-gray-400">URL do Apps Script (Web App):</label>
+                <input type="text" id="scriptUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full p-2 bg-slate-900 border border-slate-700 rounded text-white text-xs outline-none">
+                <button onclick="saveApiUrl()" class="w-full bg-slate-700 hover:bg-slate-600 text-white py-1 rounded text-xs">Guardar Ligação</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
+
+            <!-- SEÇÃO 1: PONTO DE VENDA (POS) -->
+            <section id="sec-pos" class="grid grid-cols-12 gap-6 h-full">
+                <!-- Lista de Produtos Disponíveis -->
+                <div class="col-span-7 flex flex-col h-full bg-white rounded-xl shadow-sm p-4 border border-gray-200">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-bold">Produtos</h2>
+                        <input type="text" id="searchPos" onkeyup="filterPosProducts()" placeholder="Pesquisar..." class="border px-3 py-1.5 rounded-lg text-sm w-48 outline-none focus:ring-1 focus:ring-blue-500">
+                    </div>
+                    <div id="posGrid" class="grid grid-cols-3 gap-3 overflow-y-auto pr-1 flex-1">
+                        <!-- Itens renderizados dinamicamente via JS -->
+                    </div>
+                </div>
+
+                <!-- Carrinho de Compras -->
+                <div class="col-span-5 bg-white rounded-xl shadow-sm p-4 border border-gray-200 flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-lg font-bold border-b pb-2 mb-4">Venda Atual</h2>
+                        <div id="cartItems" class="space-y-3 max-h-[350px] overflow-y-auto pr-1">
+                            <p class="text-center text-gray-400 my-8 text-sm">O carrinho está vazio</p>
+                        </div>
+                    </div>
+
+                    <div class="border-t pt-4 mt-4 space-y-3">
+                        <div class="flex justify-between text-gray-600 text-sm">
+                            <span>Subtotal</span>
+                            <span id="cartSubtotal">0.00 MT</span>
+                        </div>
+                        <div class="flex justify-between text-xl font-bold text-gray-900">
+                            <span>Total</span>
+                            <span id="cartTotal">0.00 MT</span>
+                        </div>
+                        <button onclick="processSale()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-lg font-bold text-lg shadow-md transition">
+                            <i class="fa-solid fa-check-circle mr-2"></i> Finalizar Venda
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 2: GESTÃO DE STOCK & PRODUTOS -->
+            <section id="sec-stock" class="hidden space-y-6">
+                <!-- Formulário de Registo de Produto -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h2 class="text-lg font-bold mb-4">Registar Novo Produto</h2>
+                    <form id="productForm" onsubmit="saveProduct(event)" class="grid grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold mb-1 text-gray-600">Código/Barra</label>
+                            <input type="text" id="prodCode" required class="w-full border p-2 rounded text-sm outline-none focus:ring-1 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold mb-1 text-gray-600">Nome do Produto</label>
+                            <input type="text" id="prodName" required class="w-full border p-2 rounded text-sm outline-none focus:ring-1 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold mb-1 text-gray-600">Preço (MT)</label>
+                            <input type="number" step="0.01" id="prodPrice" required class="w-full border p-2 rounded text-sm outline-none focus:ring-1 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold mb-1 text-gray-600">Quantidade Em Stock</label>
+                            <input type="number" id="prodStock" required class="w-full border p-2 rounded text-sm outline-none focus:ring-1 focus:ring-blue-500">
+                        </div>
+                        <div class="col-span-4 flex justify-end">
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium text-sm transition">
+                                Guardar Produto
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Tabela de Inventário -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-bold">Inventário Atual</h2>
+                        <button onclick="loadInitialData()" class="text-sm text-blue-600 hover:underline"><i class="fa-solid fa-rotate mr-1"></i> Atualizar Dados</button>
+                    </div>
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b text-xs uppercase text-gray-400 bg-gray-50">
+                                <th class="py-3 px-4">Código</th>
+                                <th class="py-3 px-4">Produto</th>
+                                <th class="py-3 px-4">Preço</th>
+                                <th class="py-3 px-4">Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stockTableBody" class="divide-y text-sm">
+                            <!-- Dados inseridos via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 3: RELATÓRIOS -->
+            <section id="sec-reports" class="hidden space-y-6">
+                <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                    <h2 class="text-lg font-bold">Relatório Geral</h2>
+                    <button onclick="exportPDF()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2">
+                        <i class="fa-solid fa-file-pdf"></i> Descarregar PDF
+                    </button>
+                </div>
+
+                <!-- Conteúdo a exportar para PDF -->
+                <div id="pdfPrintArea" class="bg-white p-8 rounded-xl shadow-sm border border-gray-200 space-y-6">
+                    <div class="border-b pb-4 flex justify-between items-center">
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-900">Relatório de Vendas e Stock</h1>
+                            <p class="text-xs text-gray-500" id="reportDate"></p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs font-semibold px-2 py-1 bg-blue-100 text-blue-700 rounded">Documento Interno</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="font-bold text-md mb-2">Histórico de Vendas</h3>
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b bg-gray-100">
+                                    <th class="py-2 px-2">Data</th>
+                                    <th class="py-2 px-2">Itens</th>
+                                    <th class="py-2 px-2 text-right">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="salesReportTable" class="divide-y">
+                                <!-- Dados populados via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Script Lógico do App -->
+    <script>
+        // Código PIN estático configurado conforme solicitado
+        const STOCK_PIN = "223344";
+
+        let products = [];
+        let cart = [];
+        let salesHistory = [];
+        let isStockAuthorized = false;
+
+        // Ao arrancar o sistema
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedUrl = localStorage.getItem('appsScriptUrl');
+            if (savedUrl) {
+                document.getElementById('scriptUrl').value = savedUrl;
+                loadInitialData();
+            }
+            document.getElementById('reportDate').innerText = 'Gerado em: ' + new Date().toLocaleString();
+        });
+
+        function saveApiUrl() {
+            const url = document.getElementById('scriptUrl').value.trim();
+            if (url) {
+                localStorage.setItem('appsScriptUrl', url);
+                alert('URL guardada com sucesso!');
+                loadInitialData();
+            }
+        }
+
+        function getApiUrl() {
+            return localStorage.getItem('appsScriptUrl') || '';
+        }
+
+        // Navegação entre Tabs
+        function switchTab(tab) {
+            if (tab === 'stock' && !isStockAuthorized) {
+                document.getElementById('authModal').classList.remove('hidden');
+                return;
+            }
+
+            document.getElementById('sec-pos').classList.add('hidden');
+            document.getElementById('sec-stock').classList.add('hidden');
+            document.getElementById('sec-reports').classList.add('hidden');
+
+            document.getElementById('tab-pos').className = "w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-800 transition";
+            document.getElementById('tab-stock').className = "w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-800 transition";
+            document.getElementById('tab-reports').className = "w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-800 transition";
+
+            document.getElementById(`sec-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-${tab}`).className = "w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-600 text-white font-medium transition";
+        }
+
+        // Validação do Código PIN para aceder ao stock
+        function verifyPin() {
+            const pin = document.getElementById('stockPinInput').value;
+            if (pin === STOCK_PIN) {
+                isStockAuthorized = true;
+                closeAuthModal();
+                switchTab('stock');
+            } else {
+                alert('Código PIN incorreto!');
+            }
+            document.getElementById('stockPinInput').value = '';
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.add('hidden');
+        }
+
+        // Leitura de Dados da Folha de Cálculo
+        async function loadInitialData() {
+            const url = getApiUrl();
+            if (!url) return;
+
+            try {
+                const response = await fetch(`${url}?action=getData`);
+                const data = await response.json();
+
+                products = data.products || [];
+                salesHistory = data.sales || [];
+
+                renderPosProducts();
+                renderStockTable();
+                renderSalesReport();
+            } catch (err) {
+                console.error("Erro ao carregar dados:", err);
+            }
+        }
+
+        // Renderizar Lista de Produtos no POS
+        function renderPosProducts(filter = '') {
+            const container = document.getElementById('posGrid');
+            container.innerHTML = '';
+
+            const filtered = products.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()) || p.code.includes(filter));
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "border rounded-lg p-3 bg-gray-50 flex flex-col justify-between hover:shadow-md cursor-pointer transition";
+                card.onclick = () => addToCart(p.code);
+                card.innerHTML = `
+                    <div>
+                        <span class="text-[10px] text-gray-400 block">${p.code}</span>
+                        <h4 class="font-bold text-sm text-gray-800 leading-tight">${p.name}</h4>
+                    </div>
+                    <div class="mt-3 flex justify-between items-center">
+                        <span class="font-semibold text-blue-600 text-sm">${parseFloat(p.price).toFixed(2)} MT</span>
+                        <span class="text-xs px-2 py-0.5 rounded ${p.stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">Stk: ${p.stock}</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterPosProducts() {
+            const val = document.getElementById('searchPos').value;
+            renderPosProducts(val);
+        }
+
+        // Gestão do Carrinho
+        function addToCart(code) {
+            const product = products.find(p => p.code === code);
+            if (!product || product.stock <= 0) {
+                alert('Produto indisponível ou sem stock!');
+                return;
+            }
+
+            const itemInCart = cart.find(item => item.code === code);
+            if (itemInCart) {
+                if (itemInCart.qty < product.stock) {
+                    itemInCart.qty++;
+                } else {
+                    alert('Quantidade excede o stock disponível!');
+                }
+            } else {
+                cart.push({ code: product.code, name: product.name, price: parseFloat(product.price), qty: 1 });
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cartItems');
+            container.innerHTML = '';
+
+            let total = 0;
+
+            if (cart.length === 0) {
+                container.innerHTML = `<p class="text-center text-gray-400 my-8 text-sm">O carrinho está vazio</p>`;
+            } else {
+                cart.forEach((item, index) => {
+                    const itemTotal = item.price * item.qty;
+                    total += itemTotal;
+
+                    const row = document.createElement('div');
+                    row.className = "flex justify-between items-center bg-gray-50 p-2 rounded text-sm";
+                    row.innerHTML = `
+                        <div class="flex-1">
+                            <h5 class="font-bold text-gray-800">${item.name}</h5>
+                            <span class="text-xs text-gray-500">${item.price.toFixed(2)} MT x ${item.qty}</span>
+                        </div>
+                        <span class="font-bold text-gray-800 mr-3">${itemTotal.toFixed(2)} MT</span>
+                        <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700 text-xs"><i class="fa-solid fa-trash"></i></button>
+                    `;
+                    container.appendChild(row);
+                });
+            }
+
+            document.getElementById('cartSubtotal').innerText = total.toFixed(2) + ' MT';
+            document.getElementById('cartTotal').innerText = total.toFixed(2) + ' MT';
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        // Processamento da Venda
+        async function processSale() {
+            const url = getApiUrl();
+            if (!url || cart.length === 0) return;
+
+            const saleData = {
+                action: 'addSale',
+                items: cart,
+                total: cart.reduce((acc, curr) => acc + (curr.price * curr.qty), 0),
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: JSON.stringify(saleData)
+                });
+
+                if (response.ok) {
+                    alert('Venda concluída com sucesso!');
+                    cart = [];
+                    updateCartUI();
+                    loadInitialData(); // Atualizar estado do stock vindo do servidor
+                }
+            } catch (err) {
+                alert('Erro ao registar venda!');
+                console.error(err);
+            }
+        }
+
+        // Guardar/Adicionar Produto ao Stock
+        async function saveProduct(e) {
+            e.preventDefault();
+            const url = getApiUrl();
+            if (!url) return;
+
+            const newProduct = {
+                action: 'addProduct',
+                code: document.getElementById('prodCode').value,
+                name: document.getElementById('prodName').value,
+                price: parseFloat(document.getElementById('prodPrice').value),
+                stock: parseInt(document.getElementById('prodStock').value)
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: JSON.stringify(newProduct)
+                });
+
+                if (response.ok) {
+                    alert('Produto registado!');
+                    document.getElementById('productForm').reset();
+                    loadInitialData();
+                }
+            } catch (err) {
+                alert('Erro ao guardar produto!');
+                console.error(err);
+            }
+        }
+
+        function renderStockTable() {
+            const tbody = document.getElementById('stockTableBody');
+            tbody.innerHTML = '';
+
+            products.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="py-3 px-4 font-mono text-xs">${p.code}</td>
+                    <td class="py-3 px-4 font-semibold">${p.name}</td>
+                    <td class="py-3 px-4">${parseFloat(p.price).toFixed(2)} MT</td>
+                    <td class="py-3 px-4"><span class="px-2 py-1 rounded text-xs font-bold ${p.stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">${p.stock}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Relatórios e Exportação PDF
+        function renderSalesReport() {
+            const tbody = document.getElementById('salesReportTable');
+            tbody.innerHTML = '';
+
+            salesHistory.forEach(s => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="py-2 px-2">${new Date(s.timestamp).toLocaleDateString()}</td>
+                    <td class="py-2 px-2">${s.itemsSummary}</td>
+                    <td class="py-2 px-2 text-right font-bold">${parseFloat(s.total).toFixed(2)} MT</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function exportPDF() {
+            const element = document.getElementById('pdfPrintArea');
+            const opt = {
+                margin:       0.5,
+                filename:     'relatorio_caixa_stock.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+</body>
+</html>
