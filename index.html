@@ -144,7 +144,7 @@
     };
 
     /**
-     * COMUNICAÇÃO HTTP COM O GOOGLE APPS SCRIPT
+     * COMUNICAÇÃO HTTP POST COM O GOOGLE APPS SCRIPT
      */
     const API = {
       async call(action, payload = {}) {
@@ -264,11 +264,22 @@
       },
 
       async carregarCatalogo() {
+        UI.loading(true);
         try {
-          const res = await API.call('catalogo');
-          if (res) UI.renderCatalogo(res.produtos);
+          // Utiliza GET especificamente para carregar o catálogo sem dar erro no doPost
+          const response = await fetch(`${GAS_WEB_APP_URL}?action=catalogo`);
+          const res = await response.json();
+          UI.loading(false);
+
+          if (res.ok) {
+            UI.renderCatalogo(res.produtos);
+          } else {
+            UI.alerta(res.erro || 'Falha ao carregar catálogo de produtos.', 'danger');
+          }
         } catch (e) {
+          UI.loading(false);
           console.error('Falha ao carregar o catálogo:', e);
+          UI.alerta('Erro ao conectar ao servidor do catálogo.', 'danger');
         }
       },
 
@@ -292,7 +303,7 @@
             UI.alerta('Autenticado com sucesso!', 'success');
           }
         } catch (err) {
-          // Erros já tratados pela API.call
+          // Erros já exibidos pela API.call
         }
       },
 
@@ -320,7 +331,7 @@
         try {
           await API.call('logout');
         } catch (e) {
-          // Limpa sessão local em caso de erro na rede
+          // Limpa sessão local em caso de falha de conexão
         } finally {
           Session.clear();
           UI.atualizarEstadoAuth();
