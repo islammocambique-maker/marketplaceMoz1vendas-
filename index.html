@@ -1,86 +1,338 @@
-<!doctype html>
-<html lang="pt-MZ">
+<!DOCTYPE html>
+<html lang="pt">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="MOZdigitalSHOP — marketplace de produtos digitais.">
-<title>MOZdigitalSHOP</title>
-<style>
-:root{--bg:#f5f7fb;--card:#fff;--text:#152033;--muted:#667085;--line:#e6e9ef;--primary:#1769e0;--primary2:#0f56bd;--ok:#16834b;--danger:#c73535;--shadow:0 8px 28px rgba(20,35,60,.08);--r:16px}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer;border:0}.wrap{max-width:1180px;margin:auto;padding:18px}.top{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}.nav{display:flex;gap:10px;align-items:center;justify-content:space-between;max-width:1180px;margin:auto;padding:12px 18px}.brand{font-size:22px;font-weight:800;color:var(--primary)}.navlinks{display:flex;gap:7px;flex-wrap:wrap}.navlinks button{background:transparent;color:var(--text);padding:9px 11px;border-radius:10px}.navlinks button:hover{background:#eef4ff}.hero{padding:28px 0 12px}.hero h1{font-size:34px;margin:0 0 7px}.hero p{color:var(--muted);margin:0}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}.cardbody{padding:16px}.thumb{width:100%;aspect-ratio:16/10;object-fit:cover;background:#edf1f7}.placeholder{display:grid;place-items:center;color:#8b95a7;font-size:34px}.price{font-size:21px;font-weight:800;margin:10px 0}.small{font-size:13px;color:var(--muted)}.badge{display:inline-flex;gap:5px;align-items:center;background:#edf8f2;color:var(--ok);padding:4px 8px;border-radius:999px;font-size:12px;font-weight:700}.btn{padding:11px 14px;border-radius:10px;background:var(--primary);color:#fff;font-weight:700}.btn:hover{background:var(--primary2)}.btn.secondary{background:#eef3fa;color:var(--text)}.btn.danger{background:#c73535}.btn:disabled{opacity:.55;cursor:not-allowed}.actions{display:flex;gap:8px;flex-wrap:wrap}.section{margin:22px 0}.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow)}.form{display:grid;gap:11px;max-width:650px}.form input,.form textarea,.form select{width:100%;padding:11px 12px;border:1px solid #d6dbe5;border-radius:10px;background:#fff}.form textarea{min-height:110px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:11px}.hidden{display:none!important}.msg{padding:11px 13px;border-radius:10px;background:#eef4ff;margin:10px 0}.msg.ok{background:#edf8f2;color:#146b40}.msg.err{background:#fff0f0;color:#a72b2b}.spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.45);border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite;vertical-align:-2px;margin-right:7px}@keyframes rot{to{transform:rotate(360deg)}}.loading{display:grid;place-items:center;min-height:130px;color:var(--muted)}.modal{position:fixed;inset:0;background:rgba(8,16,30,.48);display:grid;place-items:center;padding:18px;z-index:30}.modalbox{background:#fff;width:min(680px,100%);max-height:90vh;overflow:auto;border-radius:18px;padding:20px}.modalhead{display:flex;justify-content:space-between;gap:10px;align-items:center}.close{background:#eef1f5;border-radius:50%;width:34px;height:34px}.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}.stat{padding:15px;border:1px solid var(--line);border-radius:13px;background:#fff}.stat strong{display:block;font-size:23px}.muted{color:var(--muted)}.footer{padding:35px 0;color:var(--muted);text-align:center}.toast{position:fixed;right:15px;bottom:15px;z-index:50;max-width:360px}.campaign{border:1px solid var(--line);border-radius:12px;padding:13px;margin:9px 0}.linkbox{word-break:break-all;background:#f5f7fb;padding:9px;border-radius:8px;font-size:13px}.pricebreak{background:#f7f9fc;border-radius:12px;padding:13px;margin:10px 0}.pricebreak div{display:flex;justify-content:space-between;margin:3px 0}.pricebreak .total{font-size:18px;font-weight:800;border-top:1px solid var(--line);padding-top:8px;margin-top:8px}.verified{color:#0d7a45;font-weight:700}.filehint{font-size:12px;color:var(--muted)}
-@media(max-width:650px){.row{grid-template-columns:1fr}.hero h1{font-size:28px}.nav{align-items:flex-start;flex-direction:column}.navlinks{width:100%}.navlinks button{padding:8px 9px}}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Content Security Policy: Proteção contra Scripts Maliciosos / XSS -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://script.google.com https://script.googleusercontent.com; img-src 'self' data: https:; object-src 'none'; frame-src 'none';">
+  <title>Marketplace Digital</title>
+  
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --border: #e2e8f0;
+      --danger: #dc2626;
+      --success: #16a34a;
+    }
 
-/* MOZdigitalSHOP — Glass Marketplace */
-:root{--bg:#07111f;--bg2:#0c1b2d;--glass:rgba(255,255,255,.085);--glass2:rgba(255,255,255,.13);--line:rgba(255,255,255,.14);--text:#f5f8ff;--muted:#aebbd0;--accent:#7c5cff;--accent2:#18d5b5;--shadow:0 24px 70px rgba(0,0,0,.32);--r:22px}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at 10% 10%,rgba(124,92,255,.28),transparent 32%),radial-gradient(circle at 90% 20%,rgba(24,213,181,.16),transparent 28%),linear-gradient(145deg,var(--bg),var(--bg2) 55%,#08101c);min-height:100vh}body:before,body:after{content:"";position:fixed;width:280px;height:280px;border-radius:50%;filter:blur(80px);opacity:.22;pointer-events:none;z-index:-1}body:before{background:#7657ff;top:18%;left:-100px}body:after{background:#13d7b7;right:-100px;bottom:8%}.top{position:sticky;top:0;z-index:20;padding:14px 18px;background:rgba(5,13,25,.58);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}.nav{max-width:1180px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:14px}.brand{font-size:20px;font-weight:900;letter-spacing:-.5px;background:linear-gradient(90deg,#fff,#a9b9ff);-webkit-background-clip:text;background-clip:text;color:transparent}.navlinks{display:flex;gap:7px;flex-wrap:wrap}.navlinks button,.btn{border:1px solid var(--line);background:var(--glass);color:var(--text);padding:10px 15px;border-radius:13px;cursor:pointer;transition:.2s ease;backdrop-filter:blur(14px)}.navlinks button:hover,.btn:hover{transform:translateY(-1px);background:var(--glass2);border-color:rgba(255,255,255,.24)}.btn{background:linear-gradient(135deg,rgba(124,92,255,.9),rgba(78,123,255,.78));border:0;box-shadow:0 10px 28px rgba(85,77,220,.25);font-weight:750}.btn.secondary{background:rgba(255,255,255,.08);box-shadow:none}.page{max-width:1180px;margin:0 auto;padding:34px 18px 70px}.panel,.card,.campaign,.stat,.modalbox{background:linear-gradient(145deg,rgba(255,255,255,.105),rgba(255,255,255,.045));border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-radius:var(--r)}.panel{padding:22px}.form input,.form textarea,.form select{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.18);color:var(--text);outline:none}.form input::placeholder,.form textarea::placeholder{color:#8e9bb0}.form input:focus,.form textarea:focus,.form select:focus{border-color:rgba(124,92,255,.75);box-shadow:0 0 0 4px rgba(124,92,255,.12)}.card{overflow:hidden;transition:.25s ease}.card:hover{transform:translateY(-5px);box-shadow:0 28px 70px rgba(0,0,0,.4)}.thumb{width:100%;height:190px;object-fit:cover;background:rgba(255,255,255,.06)}.cardbody{padding:17px}.price{font-size:21px;font-weight:900;margin:10px 0}.small,.muted,.filehint{color:var(--muted)}.stat{padding:18px}.stat strong{font-size:25px}.msg{border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--text)}.msg.ok{background:rgba(35,202,139,.13);color:#9af0cc}.msg.err{background:rgba(255,72,98,.13);color:#ffb1bd}.loading{min-height:180px;color:var(--muted)}.modal{background:rgba(2,8,17,.68);backdrop-filter:blur(10px)}.modalbox{color:var(--text)}.close{background:rgba(255,255,255,.1);color:#fff;border:1px solid var(--line)}.footer{color:var(--muted);border-top:1px solid var(--line);margin-top:20px}.glass-note{padding:15px;border:1px solid var(--line);background:rgba(124,92,255,.09);border-radius:16px;color:#dbe2f1}.linkbox,.pricebreak{background:rgba(0,0,0,.16);border:1px solid var(--line)}.campaign{padding:15px}.hero{padding:48px 10px 28px;text-align:center}.hero h1{font-size:clamp(38px,7vw,72px);line-height:.98;letter-spacing:-3px;margin:8px 0 16px}.hero p{max-width:700px;margin:0 auto;color:var(--muted);font-size:17px}.hero .actions{justify-content:center;margin-top:24px}@media(max-width:680px){.page{padding:24px 12px 55px}.navlinks button{padding:8px 10px}.hero h1{letter-spacing:-2px}.row{grid-template-columns:1fr}.thumb{height:170px}}
-</style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 20px; display: flex; justify-content: center; }
+    
+    .container { width: 100%; max-width: 900px; background: var(--surface); padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+    header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 24px; }
+    
+    .btn { background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-weight: 500; transition: background 0.2s; }
+    .btn:hover { background: var(--primary-hover); }
+    .btn-danger { background: var(--danger); }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+    .card { border: 1px solid var(--border); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; background: #fff; }
+    .card img { width: 100%; height: 160px; object-fit: cover; border-radius: 4px; margin-bottom: 12px; }
+    .card h3 { font-size: 1.1rem; margin-bottom: 8px; }
+    .card p { color: #64748b; font-size: 0.9rem; margin-bottom: 12px; flex-grow: 1; }
+    .card .price { font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+
+    .alert { padding: 12px; border-radius: 6px; margin-bottom: 16px; display: none; }
+    .alert-danger { background: #fee2e2; color: var(--danger); border: 1px solid #fca5a5; }
+    .alert-success { background: #dcfce7; color: var(--success); border: 1px solid #86efac; }
+    
+    .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); justify-content: center; align-items: center; font-weight: bold; z-index: 9999; }
+
+    /* Modais */
+    .modal-backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
+    .modal { background: #fff; padding: 24px; border-radius: 8px; width: 100%; max-width: 400px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+    .modal h2 { margin-bottom: 16px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; margin-bottom: 4px; font-size: 0.9rem; }
+    .form-group input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+  </style>
 </head>
 <body>
-<header class="top"><nav class="nav"><div class="brand">MOZdigitalSHOP</div><div class="navlinks"><button onclick="show('home')">Início</button><button onclick="show('account')">Conta</button><button id="sellerNav" class="hidden" onclick="show('seller')">Vendedor</button><button id="promoterNav" class="hidden" onclick="show('promoter')">Promotor</button><button id="logoutBtn" class="hidden" onclick="logout()">Sair</button></div></nav></header>
-<main class="wrap">
-<section id="home" class="page"><div class="hero"><div class="small">MARKETPLACE DIGITAL • MOÇAMBIQUE</div><h1>O teu conteúdo.<br><span style="color:#9e91ff">Num só lugar.</span></h1><p>Descubra, compre, venda e promova produtos digitais com uma experiência simples, rápida e moderna.</p><div class="actions"><button class="btn" onclick="show('account')">Começar agora</button><button class="btn secondary" onclick="document.getElementById('catalog').scrollIntoView({behavior:'smooth'})">Explorar produtos</button></div></div><div class="hero"><h1>Produtos digitais, num só lugar.</h1><p>PDFs, e-books, vídeos, áudios, ZIPs, cursos e outros conteúdos digitais.</p></div><div id="catalogMsg"></div><div id="catalog" class="grid"><div class="loading">A carregar produtos…</div></div></section>
-<section id="account" class="page hidden"><div class="panel"><h2 id="accountTitle">Entrar</h2><div id="accountMsg"></div><form id="loginForm" class="form"><input id="loginContact" placeholder="Contacto (+258XXXXXXXXX)" required><input id="loginEmail" type="email" placeholder="Email" required><input id="loginPin" type="password" inputmode="numeric" maxlength="6" placeholder="PIN de 6 dígitos" required><label><input id="remember" type="checkbox"> Memorizar contacto e email</label><button class="btn" type="submit">Entrar</button><button class="btn secondary" type="button" onclick="toggleAccount('register')">Criar conta</button><button class="btn secondary" type="button" onclick="toggleAccount('seller')">Quero vender</button></form>
-<form id="registerForm" class="form hidden"><input id="regName" placeholder="Nome" required><input id="regContact" placeholder="Contacto (+258XXXXXXXXX)" required><input id="regEmail" type="email" placeholder="Email" required><input id="regPin" type="password" inputmode="numeric" maxlength="6" placeholder="PIN de 6 dígitos" required><button class="btn" type="submit">Criar conta</button><button class="btn secondary" type="button" onclick="toggleAccount('login')">Já tenho conta</button></form>
-<div id="sellerForm" class="form hidden"><div class="glass-note"><strong>Uma conta, várias funções.</strong><br>Já tem conta? Não precisa de novo registo. Ative apenas a função de vendedor usando a sua sessão.</div><input id="sellerCompany" placeholder="Empresa / marca (opcional)"><button class="btn" type="button" onclick="activateSeller()">Ativar função de vendedor</button><button class="btn secondary" type="button" onclick="toggleAccount('login')">Voltar</button></div></div></section>
-<section id="seller" class="page hidden"><div id="sellerMsg"></div><div class="panel"><h2>Área do vendedor</h2><div id="sellerStats" class="statgrid"></div></div><div class="panel section"><h3>Novo produto digital</h3><form id="productForm" class="form"><input id="pName" placeholder="Nome do produto" required><textarea id="pDesc" placeholder="Descrição" required></textarea><div class="row"><input id="pPrice" type="number" min="1" step="0.01" placeholder="Preço em MT" required><input id="pCategory" placeholder="Categoria"></div><div class="row"><input id="pFormat" placeholder="Formato (PDF, vídeo, ZIP...)" required><input id="pImage" type="url" placeholder="URL da imagem (opcional)"></div><input id="pFile" type="file" required><div class="filehint">O upload é enviado ao backend. Para este método, o GAS limita o conteúdo codificado ao tamanho definido no backend.</div><button class="btn" type="submit">Publicar produto</button></form></div><div class="panel section"><h3>Meus produtos</h3><div id="myProducts"></div></div><div class="panel section"><h3>Promoção</h3><p class="small">Compra de visitas válidas para aumentar a visualização. A promoção não garante vendas.</p><form id="campaignForm" class="form"><select id="campaignProduct" required><option value="">Escolha o produto</option></select><input id="campaignVisits" type="number" min="1" step="1" placeholder="Número de visitas" required><button class="btn" type="submit">Criar campanha</button></form><div id="campaignPay"></div></div></section>
-<section id="promoter" class="page hidden"><div id="promoterMsg"></div><div class="panel"><h2>Área do promotor</h2><div id="promoterStats" class="statgrid"></div><div class="actions section"><button class="btn" onclick="activatePromoter()">Ativar função de promotor</button></div></div><div class="panel section"><h3>Campanhas disponíveis</h3><div id="campaigns"></div></div></section>
-<section id="productPage" class="page hidden"><div id="productView"></div></section>
-<section id="deliveryPage" class="page hidden"><div class="panel"><h2>Entrega digital</h2><div id="deliveryBox"></div></div></section>
-</main><div id="modal" class="modal hidden"><div class="modalbox"><div class="modalhead"><h3 id="modalTitle">Pagamento</h3><button class="close" onclick="closeModal()">×</button></div><div id="modalBody"></div></div></div><div id="toast" class="toast"></div><footer class="footer">© <span id="year"></span> MOZdigitalSHOP</footer>
-<script>
-'use strict';
-/* Apenas o endereço público da implantação do Web App. Nunca coloque API Key, Wallet ID ou segredos aqui. */
-const GAS_URL='https://script.google.com/macros/s/AKfycbze0-RgAdmR1ijKd8C4fkVxH2TdOoL4ZsW2UFiUugnOkcY913maLc7SLO9zW0MUiq_K3g/exec';
-const APP='MOZdigitalSHOP';
-const state={session:localStorage.getItem('mds_session')||'',user:null,product:null,payment:null,visitorHash:null};
-const $=id=>document.getElementById(id);
-const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
-function toast(msg,ok=true){$('toast').innerHTML='<div class="msg '+(ok?'ok':'err')+'">'+esc(msg)+'</div>';setTimeout(()=>{$('toast').innerHTML=''},4500)}
-function setMsg(id,msg,ok=false){$(id).innerHTML=msg?'<div class="msg '+(ok?'ok':'err')+'">'+esc(msg)+'</div>':''}
-function show(id){document.querySelectorAll('.page').forEach(x=>x.classList.add('hidden'));$(id).classList.remove('hidden');if(id==='home')loadCatalog();if(id==='seller')loadSeller();if(id==='promoter')loadPromoter();window.scrollTo({top:0,behavior:'smooth'})}
-function toggleAccount(which){$('loginForm').classList.toggle('hidden',which!=='login');$('registerForm').classList.toggle('hidden',which!=='register');$('sellerForm').classList.toggle('hidden',which!=='seller');$('accountTitle').textContent=which==='login'?'Entrar':which==='register'?'Criar conta':'Quero vender'}
-function assertApi(){if(!GAS_URL||GAS_URL.includes('COLOQUE_AQUI'))throw new Error('Configure primeiro a URL pública do Web App do GAS no index.html.')} 
-async function api(action,data={},method='POST'){assertApi();let url=GAS_URL;let opts={method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,...data})};if(method==='GET'){const q=new URLSearchParams({action,...data});url+='?'+q.toString();delete opts.body;opts.method='GET';delete opts.headers}const r=await fetch(url,opts);let j;try{j=await r.json()}catch(e){throw new Error('Resposta inválida do servidor.')}if(!j.ok){if(j.erro&&/sessão inválida|expirada|não está ativa|conta não está ativa/i.test(j.erro)){clearSession()}throw new Error(j.erro||'Operação não concluída.');}return j}
-function saveSession(j){state.session=j.sessionToken||'';if(state.session)localStorage.setItem('mds_session',state.session);state.user=j;updateNav()}
-function clearSession(){state.session='';state.user=null;localStorage.removeItem('mds_session');updateNav()}
-function updateNav(){const logged=!!state.session;$('logoutBtn').classList.toggle('hidden',!logged);$('sellerNav').classList.toggle('hidden',!logged);$('promoterNav').classList.toggle('hidden',!logged)}
-function remembered(){const x=localStorage.getItem('mds_remember');if(x){try{const d=JSON.parse(x);$('loginContact').value=d.contacto||'';$('loginEmail').value=d.email||'';$('remember').checked=true}catch(e){}}}
-async function loadCatalog(){
-  $('catalog').innerHTML='<div class="loading">A carregar produtos…</div>';
-  try{const j=await api('catalogo',{},'GET');const items=j.produtos||[];if(!items.length){$('catalog').innerHTML='<div class="panel">Ainda não existem produtos publicados.</div>';return}$('catalog').innerHTML=items.map(productCard).join('')}catch(e){$('catalog').innerHTML='<div class="panel"><div class="msg err">'+esc(e.message)+'</div></div>'}
-}
-function productCard(p){const img=p.imagemUrl?'<img class="thumb" src="'+esc(p.imagemUrl)+'" alt="'+esc(p.nome)+'" loading="lazy">':'<div class="thumb placeholder">▣</div>';return '<article class="card">'+img+'<div class="cardbody"><h3>'+esc(p.nome)+'</h3><div class="small">'+esc(p.categoria||p.formato||'Produto digital')+'</div><div class="price">'+money(p.preco)+' MT</div><div class="actions"><button class="btn" onclick="openProduct(\''+esc(p.produtoId)+'\')">Ver produto</button></div></div></article>'}
-function money(n){return Number(n||0).toLocaleString('pt-MZ',{minimumFractionDigits:0,maximumFractionDigits:2})}
-async function openProduct(id){show('productPage');$('productView').innerHTML='<div class="loading">A carregar produto…</div>';try{const j=await api('produto',{produtoId:id},'GET');state.product=j.produto;$('productView').innerHTML=productDetail(j.produto)}catch(e){$('productView').innerHTML='<div class="panel"><div class="msg err">'+esc(e.message)+'</div></div>'}}
-function productDetail(p){const total=Math.floor(Number(p.preco)*1.15);const fee=total-Number(p.preco);const img=p.imagemUrl?'<img class="thumb" src="'+esc(p.imagemUrl)+'" alt="'+esc(p.nome)+'">':'<div class="thumb placeholder">▣</div>';return '<div class="panel">'+img+'<h1>'+esc(p.nome)+'</h1><p>'+esc(p.descricao)+'</p><div class="small">Formato: '+esc(p.formato||'digital')+'</div><div class="pricebreak"><div><span>Preço do produto</span><strong>'+money(p.preco)+' MT</strong></div><div><span>Taxa de serviço (15%)</span><strong>'+money(fee)+' MT</strong></div><div class="total"><span>Total para o cliente</span><strong>'+money(total)+' MT</strong></div></div><div class="actions"><button class="btn" onclick="buyProduct(\''+esc(p.produtoId)+'\')">Comprar com NetShop</button></div><p class="small">O preço do produto é definido pelo vendedor. A taxa é suportada pelo cliente.</p></div>'}
-function needLogin(){if(!state.session){show('account');toggleAccount('login');toast('Entre na sua conta para continuar.',false);return false}return true}
-async function buyWithBalance(pid){if(!needLogin())return;const p=state.product;if(!p)return;try{const s=await api('resumoSaldo',{sessionToken:state.session});const total=Math.floor(Number(p.preco)*1.15);const disponivel=Number(s.saldoTotal||0);openModal('Comprar com saldo','<div class="pricebreak"><div><span>Preço do produto</span><strong>'+money(p.preco)+' MT</strong></div><div><span>Taxa de serviço (15%)</span><strong>'+money(total-Number(p.preco))+' MT</strong></div><div class="total"><span>Total a debitar</span><strong>'+money(total)+' MT</strong></div></div><p>Saldo disponível: <strong>'+money(disponivel)+' MT</strong></p><p class="small">O pagamento será feito internamente. O vendedor recebe o valor integral do produto.</p><button id="balanceBuyBtn" class="btn" '+(disponivel<total?'disabled':'')+'>Confirmar compra</button>');$('balanceBuyBtn').onclick=async()=>{const b=$('balanceBuyBtn');b.disabled=true;b.innerHTML='<span class="spin"></span>A processar…';try{const idem=(crypto?.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random());const j=await api('comprarComSaldo',{sessionToken:state.session,produtoId:pid,idempotencyKey:idem});closeModal();state.payment=j;show('deliveryPage');await loadDeliveryFromToken(j.vendaId,j.deliveryToken);toast('Compra concluída com sucesso.',true)}catch(e){toast(e.message,false);b.disabled=false;b.textContent='Confirmar compra'}}}catch(e){toast(e.message,false)}}
-async function buyProduct(pid){if(!needLogin())return;const p=state.product;if(!p)return;openModal('Pagamento','<form id="payForm" class="form"><input id="payContact" value="'+esc(state.user.contacto||localStorage.getItem('mds_contact')||'')+'" placeholder="Contacto" required><input id="payEmail" type="email" value="'+esc(state.user.email||localStorage.getItem('mds_email')||'')+'" placeholder="Email" required><select id="payMethod"><option value="mpesa">M-Pesa</option><option value="emola">e-Mola</option><option value="mkesh">mKesh</option><option value="card">Cartão</option></select><div class="pricebreak"><div><span>Produto</span><strong>'+money(p.preco)+' MT</strong></div><div><span>Total</span><strong>'+money(Math.floor(Number(p.preco)*1.15))+' MT</strong></div></div><button class="btn" type="submit">Pagar</button></form>');$('payForm').onsubmit=async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;b.innerHTML='<span class="spin"></span>A processar…';try{const j=await api('criarPagamento',{produtoId:pid,contacto:$('payContact').value,email:$('payEmail').value,metodo:$('payMethod').value});state.payment=j;localStorage.setItem('mds_contact',$('payContact').value);localStorage.setItem('mds_email',$('payEmail').value);closeModal();if(j.status==='PAGO'){openDelivery(j)}else if(j.checkoutUrl){window.location.href=j.checkoutUrl}else{openModal('Pagamento em processamento','<p>O pagamento foi criado. Aguarde a confirmação do NetShop.</p><div id="verifyBox"><button class="btn" onclick="checkPayment()">Verificar pagamento</button></div>');}}catch(err){b.disabled=false;b.textContent='Pagar';toast(err.message,false)}}}
-async function checkPayment(){if(!state.payment)return;const box=$('verifyBox');if(box)box.innerHTML='<p><span class="spin" style="border-color:#bbb;border-top-color:#1769e0"></span>A verificar…</p>';try{const j=await api('verificarPagamento',{sessionToken:state.session,vendaId:state.payment.vendaId});if(j.status==='PAGO'){state.payment={...state.payment,...j};closeModal();openDelivery(j)}else{if(box)box.innerHTML='<p>Estado atual: <strong>'+esc(j.status)+'</strong></p><button class="btn" onclick="checkPayment()">Verificar novamente</button>'}}catch(e){if(box)box.innerHTML='<div class="msg err">'+esc(e.message)+'</div><button class="btn" onclick="checkPayment()">Tentar novamente</button>'}}
-function openDelivery(j){show('deliveryPage');$('deliveryBox').innerHTML='<div class="msg ok">Pagamento confirmado. O valor do produto foi registado.</div><p><strong>Venda:</strong> '+esc(j.vendaId||state.payment?.vendaId||'')+'</p><button class="btn" onclick="getDelivery()">Aceder ao produto</button>'}
-async function getDelivery(){const v=state.payment;if(!v)return;const token=v.deliveryToken||localStorage.getItem('mds_delivery_'+v.vendaId);try{const j=await api('obterEntrega',{vendaId:v.vendaId,token,email:state.user?.email||localStorage.getItem('mds_email')||''});$('deliveryBox').innerHTML='<div class="msg ok">Produto disponível.</div><h3>'+esc(j.nome)+'</h3><a class="btn" href="'+esc(j.arquivoUrl)+'" target="_blank" rel="noopener">Abrir produto</a><div class="section"><h3>Confirmação</h3><div class="actions"><button class="btn" onclick="receipt(true)">Recebi</button><button class="btn secondary" onclick="receipt(false)">Não recebi</button></div></div><div id="satBox" class="section"></div>'}catch(e){$('deliveryBox').innerHTML='<div class="msg err">'+esc(e.message)+'</div><p class="small">Se acabou de pagar, aguarde a confirmação e tente novamente.</p>'}}
-async function receipt(recebeu){const v=state.payment;const token=v.deliveryToken;try{await api('confirmarRecebimento',{vendaId:v.vendaId,token,email:state.user?.email,recebeu});$('satBox').innerHTML='<h3>Está satisfeito com o produto?</h3><div class="actions"><button class="btn" onclick="satisfaction(true)">Sim</button><button class="btn secondary" onclick="satisfaction(false)">Tenho um problema</button></div>'}catch(e){toast(e.message,false)}}
-async function satisfaction(ok){const v=state.payment;const token=v.deliveryToken;let stars=0;if(ok)stars=Number(prompt('Avaliação de 1 a 5 estrelas (opcional):')||0)||0;const comment=prompt('Comentário (opcional):')||'';try{await api('avaliarSatisfacao',{vendaId:v.vendaId,token,email:state.user?.email,satisfeito:ok,estrelas:stars,comentario:comment});$('satBox').innerHTML='<div class="msg ok">Obrigado pelo seu feedback.</div>'}catch(e){toast(e.message,false)}}
-async function loadSeller(){if(!needLogin())return;try{const j=await api('resumoVendedor',{sessionToken:state.session});$('sellerStats').innerHTML='<div class="stat"><span class="muted">Vendas pagas</span><strong>'+j.vendasPagas+'</strong></div><div class="stat"><span class="muted">Total vendido</span><strong>'+money(j.vendasLiquidas)+' MT</strong></div><div class="stat"><span class="muted">Saldo disponível</span><strong>'+money(j.saldoDisponivel)+' MT</strong></div><div class="stat"><span class="muted">Selo</span><strong class="'+(j.selo?.verificavel?'verified':'')+'">'+(j.selo?.verificavel?'✓ Verificável':'—')+'</strong></div>';const p=await api('meusProdutos',{sessionToken:state.session});$('myProducts').innerHTML=(p.produtos||[]).map(x=>'<div class="campaign"><strong>'+esc(x.nome)+'</strong><div>'+money(x.preco)+' MT · '+esc(x.status)+'</div></div>').join('')||'<p class="muted">Nenhum produto.</p>';populateCampaignProducts(p.produtos||[])}catch(e){setMsg('sellerMsg',e.message,false)}}
-function populateCampaignProducts(items){$('campaignProduct').innerHTML='<option value="">Escolha o produto</option>'+items.filter(x=>String(x.status).toUpperCase()==='ATIVO').map(x=>'<option value="'+esc(x.produtoId)+'">'+esc(x.nome)+' — '+money(x.preco)+' MT</option>').join('')}
-async function submitProduct(e){e.preventDefault();if(!needLogin())return;const file=$('pFile').files[0];if(!file){toast('Selecione o ficheiro digital.',false);return}const btn=e.submitter;btn.disabled=true;btn.innerHTML='<span class="spin"></span>A enviar…';try{const b64=await fileToBase64(file);const j=await api('criarProduto',{sessionToken:state.session,nome:$('pName').value,descricao:$('pDesc').value,preco:$('pPrice').value,categoria:$('pCategory').value,formato:$('pFormat').value,imagemUrl:$('pImage').value,fileName:file.name,mimeType:file.type,fileBase64:b64});toast('Produto enviado para aprovação.',true);$('productForm').reset();loadSeller()}catch(e){toast(e.message,false)}finally{btn.disabled=false;btn.textContent='Publicar produto'}}
-function fileToBase64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result).split(',')[1]);r.onerror=reject;r.readAsDataURL(file)})}
-async function submitCampaign(e){e.preventDefault();const btn=e.submitter;btn.disabled=true;try{const j=await api('promoverProduto',{sessionToken:state.session,produtoId:$('campaignProduct').value,visitas:$('campaignVisits').value});$('campaignPay').innerHTML='<div class="campaign"><strong>Campanha criada</strong><p>'+money(j.total)+' MT para '+esc($('campaignVisits').value)+' visitas.</p><select id="campaignMethod"><option value="mpesa">M-Pesa</option><option value="emola">e-Mola</option><option value="mkesh">mKesh</option></select> <button class="btn" onclick="payCampaign(\''+esc(j.campanhaId)+'\')">Pagar campanha</button></div>'}catch(e){toast(e.message,false)}finally{btn.disabled=false}}
-async function payCampaign(id){try{const j=await api('pagarPromocao',{sessionToken:state.session,campanhaId:id,metodo:$('campaignMethod').value});if(j.checkoutUrl)window.location.href=j.checkoutUrl;else toast(j.status==='PAGO'?'Campanha ativada.':'Pagamento criado; aguarde confirmação.',true);loadPromoter()}catch(e){toast(e.message,false)}}
-async function activatePromoter(){try{await api('ativarPromotor',{sessionToken:state.session});toast('Função de promotor ativada.',true);loadPromoter()}catch(e){toast(e.message,false)}}
-async function loadPromoter(){if(!needLogin())return;try{const j=await api('resumoPromotor',{sessionToken:state.session});$('promoterStats').innerHTML='<div class="stat"><span class="muted">Saldo</span><strong>'+money(j.saldo)+' MT</strong></div><div class="stat"><span class="muted">Mínimo</span><strong>'+money(j.minimoPayout)+' MT</strong></div>';const c=await api('campanhasDisponiveis',{sessionToken:state.session});$('campaigns').innerHTML=(c.campanhas||[]).map(x=>'<div class="campaign"><strong>Produto '+esc(x.produtoId)+'</strong><div>'+esc(x.visitasRestantes)+' visitas restantes · '+money(x.custoVisita)+' MT/visita</div><button class="btn" onclick="getPromoterLink(\''+esc(x.campanhaId)+'\')">Gerar meu link</button><div id="link-'+esc(x.campanhaId)+'"></div></div>').join('')||'<p class="muted">Não há campanhas ativas.</p>'}catch(e){setMsg('promoterMsg',e.message,false)}}
-async function getPromoterLink(id){try{const j=await api('ativarLinkPromocao',{sessionToken:state.session,campanhaId:id});const base=location.origin+location.pathname;const url=base+'?promocao='+encodeURIComponent(j.token);const box=$('link-'+id);if(box)box.innerHTML='<p class="linkbox">'+esc(url)+'</p><button class="btn secondary" onclick="navigator.clipboard?.writeText('+JSON.stringify(url)+');toast(\'Link copiado.\')">Copiar</button>'}catch(e){toast(e.message,false)}}
-async function processPromotionLink(){const token=new URLSearchParams(location.search).get('promocao');if(!token)return;const visitor=getVisitorHash();try{const j=await api('campanha',{token,visitor},'GET');if(j.status==='ENCERRADA'){show('home');toast(j.mensagem||'Esta campanha terminou.',false);return}if(j.status!=='ATIVA')return;const p=await api('produto',{produtoId:j.produtoId},'GET');state.product=p.produto;show('productPage');$('productView').innerHTML=productDetail(p.produto)+'<div id="visitBox" class="panel section"><p>Esta visita promocional só será validada após o produto carregar e o tempo mínimo ser cumprido.</p><button class="btn" onclick="startVisit(\''+esc(j.token)+'\')">Iniciar visita</button></div>'}catch(e){toast(e.message,false)}}
-function getVisitorHash(){let x=localStorage.getItem('mds_visitor');if(!x){x=crypto?.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random();localStorage.setItem('mds_visitor',x)}return sha256(x)}
-async function sha256(s){if(window.crypto?.subtle){const b=new TextEncoder().encode(s),h=await crypto.subtle.digest('SHA-256',b);return [...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,'0')).join('')}return s.padEnd(20,'0')}
-async function startVisit(token){try{const visitor=await getVisitorHash();const j=await api('iniciarVisita',{token,visitorHash:visitor});state.visitorHash=visitor;if(j.status==='ENCERRADA'){toast('Esta campanha já terminou.',false);return}localStorage.setItem('mds_visit_'+j.visitaId,String(Date.now()));$('visitBox').innerHTML='<div class="msg ok">Produto carregado. Aguarde '+esc(j.esperaSegundos)+' segundos nesta página.</div><div id="visitTimer"></div>';let left=Number(j.esperaSegundos)||20;const t=setInterval(()=>{left--;if(left<=0){clearInterval(t);confirmVisit(j.visitaId)}else $('visitTimer').textContent='Tempo restante: '+left+' s'},1000)}catch(e){toast(e.message,false)}}
-async function confirmVisit(id){try{const j=await api('confirmarVisita',{visitaId:id,produtoCarregado:'SIM'});toast(j.status==='VALIDA'?'Visita validada. Obrigado.':j.status,true)}catch(e){toast(e.message,false)}}
-async function loginSubmit(e){e.preventDefault();const b=e.submitter;b.disabled=true;b.innerHTML='<span class="spin"></span>A entrar…';try{const j=await api('login',{contacto:$('loginContact').value,email:$('loginEmail').value,pin:$('loginPin').value});saveSession(j);if($('remember').checked){localStorage.setItem('mds_remember',JSON.stringify({contacto:$('loginContact').value,email:$('loginEmail').value}))}else localStorage.removeItem('mds_remember');toast('Sessão iniciada.',true);show('home')}catch(err){setMsg('accountMsg',err.message,false)}finally{b.disabled=false;b.textContent='Entrar'}}
-async function registerSubmit(e){e.preventDefault();const b=e.submitter;b.disabled=true;try{const j=await api('registarUtilizador',{nome:$('regName').value,contacto:$('regContact').value,email:$('regEmail').value,pin:$('regPin').value});toast(j.mensagem||'Registo criado. Aguarde a ativação pelo administrador.',true);setMsg('accountMsg','Registo criado. A conta fica PENDENTE até o administrador colocar ATIVO na planilha.',true);toggleAccount('login');$('loginContact').value=$('regContact').value;$('loginEmail').value=$('regEmail').value}catch(err){setMsg('accountMsg',err.message,false)}finally{b.disabled=false}}
-async function activateSeller(){if(!needLogin()){toast('Entre na sua conta primeiro.',false);return}const company=String($('sellerCompany').value||'').trim();try{const j=await api('ativarVendedor',{sessionToken:state.session,empresa:company});toast(j.mensagem||'Função de vendedor ativada.',true);show('seller')}catch(err){toast(err.message,false)}}
-async function logout(){try{if(state.session)await api('logout',{sessionToken:state.session})}catch(e){}clearSession();show('home');toast('Sessão terminada.',true)}
-function openModal(title,html){$('modalTitle').textContent=title;$('modalBody').innerHTML=html;$('modal').classList.remove('hidden')}function closeModal(){$('modal').classList.add('hidden')}
-$('loginForm').onsubmit=loginSubmit;$('registerForm').onsubmit=registerSubmit;$('productForm').onsubmit=submitProduct;$('campaignForm').onsubmit=submitCampaign;$('year').textContent=new Date().getFullYear();remembered();updateNav();loadCatalog();processPromotionLink();
-</script>
+
+  <div class="container">
+    <header>
+      <h1>Marketplace Digital</h1>
+      <div id="auth-controls">
+        <button id="btn-login-view" class="btn" onclick="UI.abrirModalAuth()">Entrar / Registar</button>
+        <button id="btn-logout" class="btn btn-danger" style="display:none;" onclick="App.logout()">Sair</button>
+      </div>
+    </header>
+
+    <div id="global-alert" class="alert"></div>
+
+    <main>
+      <h2>Catálogo de Produtos</h2>
+      <br>
+      <div id="catalogo-grid" class="grid">
+        <!-- Produtos injetados dinamicamente via backend -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Autenticação / Registro -->
+  <div id="modal-auth" class="modal-backdrop">
+    <div class="modal">
+      <h2 id="modal-title">Entrar na Conta</h2>
+      <form id="form-auth" onsubmit="App.submeterAuth(event)">
+        <div class="form-group" id="group-nome" style="display:none;">
+          <label>Nome Completo</label>
+          <input type="text" id="auth-nome" placeholder="O seu nome">
+        </div>
+        <div class="form-group">
+          <label>Contacto (Ex: +258840000000)</label>
+          <input type="text" id="auth-contacto" required placeholder="+258...">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="auth-email" required placeholder="seu@email.com">
+        </div>
+        <div class="form-group">
+          <label>PIN (6 dígitos numéricos)</label>
+          <input type="password" id="auth-pin" maxlength="6" pattern="\d{6}" required placeholder="******">
+        </div>
+        <div style="font-size: 0.85rem; margin-top: 8px;">
+          <a href="#" id="toggle-auth-mode" onclick="UI.alternarModoAuth(event)">Não tem conta? Registe-se</a>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn" style="background:#64748b;" onclick="UI.fecharModalAuth()">Cancelar</button>
+          <button type="submit" class="btn">Confirmar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="loading" class="loading-overlay">A processar operação segura...</div>
+
+  <script>
+    /**
+     * CONFIGURAÇÃO PRINCIPAL: URL DO SEU WEB APP NO APPS SCRIPT
+     */
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw_bSisi4qn-PbAX07w_LXeefiqF9CzcNtukrdPc7wBLDdsGsRc4gHQTP92-bjAdbGtfQ/exec";
+
+    /**
+     * MÓDULO DE HIGIENIZAÇÃO DE DADOS (PROTEÇÃO ANTI-XSS)
+     */
+    const Security = {
+      escapeHTML(str) {
+        if (typeof str !== 'string') return '';
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+      }
+    };
+
+    /**
+     * GERENCIADOR DE SESSÃO LOCAL (EM MEMÓRIA)
+     */
+    const Session = {
+      getToken() {
+        return sessionStorage.getItem('SESS_TOKEN') || null;
+      },
+      setToken(token) {
+        if (token) sessionStorage.setItem('SESS_TOKEN', token);
+      },
+      clear() {
+        sessionStorage.removeItem('SESS_TOKEN');
+      }
+    };
+
+    /**
+     * COMUNICAÇÃO HTTP COM O GOOGLE APPS SCRIPT
+     */
+    const API = {
+      async call(action, payload = {}) {
+        if (!GAS_WEB_APP_URL || GAS_WEB_APP_URL.includes("COLE_AQUI")) {
+          UI.alerta("Erro: Insira a URL do seu Apps Script na variável GAS_WEB_APP_URL.", "danger");
+          return;
+        }
+
+        UI.loading(true);
+        try {
+          payload.action = action;
+          payload.sessionToken = Session.getToken();
+
+          // Utiliza text/plain para contornar restrições de CORS Pre-flight no Apps Script
+          const response = await fetch(GAS_WEB_APP_URL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "text/plain;charset=utf-8"
+            },
+            body: JSON.stringify(payload)
+          });
+
+          const res = await response.json();
+          UI.loading(false);
+
+          if (!res.ok) {
+            throw new Error(res.erro || 'Ocorreu um erro no servidor.');
+          }
+          return res;
+        } catch (error) {
+          UI.loading(false);
+          UI.alerta(error.message, 'danger');
+          throw error;
+        }
+      }
+    };
+
+    /**
+     * CAMADA DE INTERFACE VISUAL
+     */
+    let modoRegistro = false;
+
+    const UI = {
+      loading(show) {
+        document.getElementById('loading').style.display = show ? 'flex' : 'none';
+      },
+      
+      alerta(mensagem, tipo = 'danger') {
+        const el = document.getElementById('global-alert');
+        el.className = `alert alert-${tipo}`;
+        el.textContent = mensagem;
+        el.style.display = 'block';
+        setTimeout(() => { el.style.display = 'none'; }, 6000);
+      },
+
+      atualizarEstadoAuth() {
+        const token = Session.getToken();
+        document.getElementById('btn-login-view').style.display = token ? 'none' : 'block';
+        document.getElementById('btn-logout').style.display = token ? 'block' : 'none';
+      },
+
+      abrirModalAuth() {
+        document.getElementById('modal-auth').style.display = 'flex';
+      },
+
+      fecharModalAuth() {
+        document.getElementById('modal-auth').style.display = 'none';
+      },
+
+      alternarModoAuth(e) {
+        e.preventDefault();
+        modoRegistro = !modoRegistro;
+        document.getElementById('modal-title').textContent = modoRegistro ? 'Criar Nova Conta' : 'Entrar na Conta';
+        document.getElementById('group-nome').style.display = modoRegistro ? 'block' : 'none';
+        document.getElementById('toggle-auth-mode').textContent = modoRegistro ? 'Já tem conta? Faça login' : 'Não tem conta? Registe-se';
+      },
+
+      renderCatalogo(produtos) {
+        const grid = document.getElementById('catalogo-grid');
+        grid.innerHTML = '';
+
+        if (!produtos || produtos.length === 0) {
+          grid.innerHTML = '<p>Nenhum produto digital disponível no momento.</p>';
+          return;
+        }
+
+        produtos.forEach(prod => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          
+          const imgUrl = prod.imagemUrl ? Security.escapeHTML(prod.imagemUrl) : 'https://via.placeholder.com/300x160?text=Produto+Digital';
+          const nome = Security.escapeHTML(prod.nome);
+          const desc = Security.escapeHTML(prod.descricao);
+          const id = Security.escapeHTML(prod.produtoId);
+          const preco = Number(prod.preco).toFixed(2);
+
+          card.innerHTML = `
+            <img src="${imgUrl}" alt="${nome}" loading="lazy">
+            <h3>${nome}</h3>
+            <p>${desc}</p>
+            <div class="price">${preco} MT</div>
+            <button class="btn" onclick="App.comprar('${id}')">Adquirir Produto</button>
+          `;
+          
+          grid.appendChild(card);
+        });
+      }
+    };
+
+    /**
+     * CONTROLADOR DE LÓGICA DO CLIENTE
+     */
+    const App = {
+      async init() {
+        UI.atualizarEstadoAuth();
+        await App.carregarCatalogo();
+      },
+
+      async carregarCatalogo() {
+        try {
+          const res = await API.call('catalogo');
+          if (res) UI.renderCatalogo(res.produtos);
+        } catch (e) {
+          console.error('Falha ao carregar o catálogo:', e);
+        }
+      },
+
+      async submeterAuth(e) {
+        e.preventDefault();
+        const contacto = document.getElementById('auth-contacto').value;
+        const email = document.getElementById('auth-email').value;
+        const pin = document.getElementById('auth-pin').value;
+
+        try {
+          if (modoRegistro) {
+            const nome = document.getElementById('auth-nome').value;
+            const res = await API.call('registarUtilizador', { nome, contacto, email, pin });
+            UI.fecharModalAuth();
+            UI.alerta(res.mensagem || 'Registo efetuado com sucesso!', 'success');
+          } else {
+            const res = await API.call('login', { contacto, email, pin });
+            Session.setToken(res.sessionToken);
+            UI.fecharModalAuth();
+            UI.atualizarEstadoAuth();
+            UI.alerta('Autenticado com sucesso!', 'success');
+          }
+        } catch (err) {
+          // Erros já tratados pela API.call
+        }
+      },
+
+      async comprar(produtoId) {
+        if (!Session.getToken()) {
+          UI.alerta('Por favor, faça login para efetuar compras.', 'danger');
+          UI.abrirModalAuth();
+          return;
+        }
+
+        try {
+          const res = await API.call('criarPagamento', { produtoId: produtoId, metodo: 'mpesa' });
+          
+          if (res && res.checkoutUrl) {
+            window.location.href = res.checkoutUrl;
+          } else if (res) {
+            UI.alerta(`Pagamento iniciado! ID da Venda: ${res.vendaId}`, 'success');
+          }
+        } catch (e) {
+          // Trata exceções do checkout
+        }
+      },
+
+      async logout() {
+        try {
+          await API.call('logout');
+        } catch (e) {
+          // Limpa sessão local em caso de erro na rede
+        } finally {
+          Session.clear();
+          UI.atualizarEstadoAuth();
+          UI.alerta('Sessão encerrada.', 'success');
+        }
+      }
+    };
+
+    // Inicialização da aplicação
+    document.addEventListener('DOMContentLoaded', () => {
+      App.init();
+    });
+  </script>
 </body>
 </html>
