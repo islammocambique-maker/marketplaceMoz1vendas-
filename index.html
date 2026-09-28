@@ -1,349 +1,314 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Content Security Policy: Proteção contra Scripts Maliciosos / XSS -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://script.google.com https://script.googleusercontent.com; img-src 'self' data: https:; object-src 'none'; frame-src 'none';">
-  <title>Marketplace Digital</title>
-  
-  <style>
-    :root {
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --text: #0f172a;
-      --border: #e2e8f0;
-      --danger: #dc2626;
-      --success: #16a34a;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: var(--bg); color: var(--text); padding: 20px; display: flex; justify-content: center; }
-    
-    .container { width: 100%; max-width: 900px; background: var(--surface); padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-    header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 24px; }
-    
-    .btn { background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-weight: 500; transition: background 0.2s; }
-    .btn:hover { background: var(--primary-hover); }
-    .btn-danger { background: var(--danger); }
-    .btn-danger:hover { background: #b91c1c; }
-    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-    
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-    .card { border: 1px solid var(--border); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; background: #fff; }
-    .card img { width: 100%; height: 160px; object-fit: cover; border-radius: 4px; margin-bottom: 12px; }
-    .card h3 { font-size: 1.1rem; margin-bottom: 8px; }
-    .card p { color: #64748b; font-size: 0.9rem; margin-bottom: 12px; flex-grow: 1; }
-    .card .price { font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: 12px; }
-
-    .alert { padding: 12px; border-radius: 6px; margin-bottom: 16px; display: none; }
-    .alert-danger { background: #fee2e2; color: var(--danger); border: 1px solid #fca5a5; }
-    .alert-success { background: #dcfce7; color: var(--success); border: 1px solid #86efac; }
-    
-    .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); justify-content: center; align-items: center; font-weight: bold; z-index: 9999; }
-
-    /* Modais */
-    .modal-backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
-    .modal { background: #fff; padding: 24px; border-radius: 8px; width: 100%; max-width: 400px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
-    .modal h2 { margin-bottom: 16px; }
-    .form-group { margin-bottom: 14px; }
-    .form-group label { display: block; margin-bottom: 4px; font-size: 0.9rem; }
-    .form-group input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem; }
-    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Content Security Policy: Proteção contra Scripts Maliciosos / XSS -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://script.google.com https://script.googleusercontent.com; img-src 'self' data: https:; object-src 'none'; frame-src 'none';">
+<title>Marketplace Digital</title>
+<style>
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --text: #0f172a;
+  --border: #e2e8f0;
+  --danger: #dc2626;
+  --success: #16a34a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+body { background: var(--bg); color: var(--text); padding: 20px; display: flex; justify-content: center; }
+.container { width: 100%; max-width: 900px; background: var(--surface); padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 24px; }
+.btn { background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-weight: 500; transition: background 0.2s; }
+.btn:hover { background: var(--primary-hover); }
+.btn-danger { background: var(--danger); }
+.btn-danger:hover { background: #b91c1c; }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+.card { border: 1px solid var(--border); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; background: #fff; }
+.card img { width: 100%; height: 160px; object-fit: cover; border-radius: 4px; margin-bottom: 12px; }
+.card h3 { font-size: 1.1rem; margin-bottom: 8px; }
+.card p { color: #64748b; font-size: 0.9rem; margin-bottom: 12px; flex-grow: 1; }
+.card .price { font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+.alert { padding: 12px; border-radius: 6px; margin-bottom: 16px; display: none; }
+.alert-danger { background: #fee2e2; color: var(--danger); border: 1px solid #fca5a5; }
+.alert-success { background: #dcfce7; color: var(--success); border: 1px solid #86efac; }
+.loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); justify-content: center; align-items: center; font-weight: bold; z-index: 9999; }
+/* Modais */
+.modal-backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
+.modal { background: #fff; padding: 24px; border-radius: 8px; width: 100%; max-width: 400px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+.modal h2 { margin-bottom: 16px; }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; margin-bottom: 4px; font-size: 0.9rem; }
+.form-group input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+</style>
 </head>
 <body>
+<div class="container">
+<header>
+<h1>Marketplace Digital</h1>
+<div id="auth-controls">
+<button id="btn-login-view" class="btn" onclick="UI.abrirModalAuth()">Entrar / Registar</button>
+<button id="btn-logout" class="btn btn-danger" style="display:none;" onclick="App.logout()">Sair</button>
+</div>
+</header>
+<div id="global-alert" class="alert"></div>
+<main>
+<h2>Catálogo de Produtos</h2>
+<br>
+<div id="catalogo-grid" class="grid">
+<!-- Produtos injetados dinamicamente via backend -->
+</div>
+</main>
+</div>
 
-  <div class="container">
-    <header>
-      <h1>Marketplace Digital</h1>
-      <div id="auth-controls">
-        <button id="btn-login-view" class="btn" onclick="UI.abrirModalAuth()">Entrar / Registar</button>
-        <button id="btn-logout" class="btn btn-danger" style="display:none;" onclick="App.logout()">Sair</button>
-      </div>
-    </header>
+<!-- Modal Autenticação / Registro -->
+<div id="modal-auth" class="modal-backdrop">
+<div class="modal">
+<h2 id="modal-title">Entrar na Conta</h2>
+<form id="form-auth" onsubmit="App.submeterAuth(event)">
+<div class="form-group" id="group-nome" style="display:none;">
+<label>Nome Completo</label>
+<input type="text" id="auth-nome" placeholder="O seu nome">
+</div>
+<div class="form-group">
+<label>Contacto (Ex: +258840000000)</label>
+<input type="text" id="auth-contacto" required placeholder="+258...">
+</div>
+<div class="form-group">
+<label>Email</label>
+<input type="email" id="auth-email" required placeholder="seu@email.com">
+</div>
+<div class="form-group">
+<label>PIN (6 dígitos numéricos)</label>
+<input type="password" id="auth-pin" maxlength="6" pattern="\d{6}" required placeholder="******">
+</div>
+<div style="font-size: 0.85rem; margin-top: 8px;">
+<a href="#" id="toggle-auth-mode" onclick="UI.alternarModoAuth(event)">Não tem conta? Registe-se</a>
+</div>
+<div class="modal-actions">
+<button type="button" class="btn" style="background:#64748b;" onclick="UI.fecharModalAuth()">Cancelar</button>
+<button type="submit" class="btn">Confirmar</button>
+</div>
+</form>
+</div>
+</div>
 
-    <div id="global-alert" class="alert"></div>
+<div id="loading" class="loading-overlay">A processar operação segura...</div>
 
-    <main>
-      <h2>Catálogo de Produtos</h2>
-      <br>
-      <div id="catalogo-grid" class="grid">
-        <!-- Produtos injetados dinamicamente via backend -->
-      </div>
-    </main>
-  </div>
+<script>
+/**
+* CONFIGURAÇÃO PRINCIPAL: URL DO SEU WEB APP NO APPS SCRIPT
+*/
+const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz0eTcw9HtmMd8eTgKbr6lygo7VQQH8GN0AIEgKtdnDKqaE59Z7CkBqofNrJiRC7ZFk-w/exec";
 
-  <!-- Modal Autenticação / Registro -->
-  <div id="modal-auth" class="modal-backdrop">
-    <div class="modal">
-      <h2 id="modal-title">Entrar na Conta</h2>
-      <form id="form-auth" onsubmit="App.submeterAuth(event)">
-        <div class="form-group" id="group-nome" style="display:none;">
-          <label>Nome Completo</label>
-          <input type="text" id="auth-nome" placeholder="O seu nome">
-        </div>
-        <div class="form-group">
-          <label>Contacto (Ex: +258840000000)</label>
-          <input type="text" id="auth-contacto" required placeholder="+258...">
-        </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="auth-email" required placeholder="seu@email.com">
-        </div>
-        <div class="form-group">
-          <label>PIN (6 dígitos numéricos)</label>
-          <input type="password" id="auth-pin" maxlength="6" pattern="\d{6}" required placeholder="******">
-        </div>
-        <div style="font-size: 0.85rem; margin-top: 8px;">
-          <a href="#" id="toggle-auth-mode" onclick="UI.alternarModoAuth(event)">Não tem conta? Registe-se</a>
-        </div>
-        <div class="modal-actions">
-          <button type="button" class="btn" style="background:#64748b;" onclick="UI.fecharModalAuth()">Cancelar</button>
-          <button type="submit" class="btn">Confirmar</button>
-        </div>
-      </form>
-    </div>
-  </div>
+/**
+* MÓDULO DE HIGIENIZAÇÃO DE DADOS (PROTEÇÃO ANTI-XSS)
+*/
+const Security = {
+  escapeHTML(str) {
+    if (typeof str !== 'string') return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+};
 
-  <div id="loading" class="loading-overlay">A processar operação segura...</div>
+/**
+* GERENCIADOR DE SESSÃO LOCAL (EM MEMÓRIA)
+*/
+const Session = {
+  getToken() {
+    return sessionStorage.getItem('SESS_TOKEN') || null;
+  },
+  setToken(token) {
+    if (token) sessionStorage.setItem('SESS_TOKEN', token);
+  },
+  clear() {
+    sessionStorage.removeItem('SESS_TOKEN');
+  }
+};
 
-  <script>
-    /**
-     * CONFIGURAÇÃO PRINCIPAL: URL DO SEU WEB APP NO APPS SCRIPT
-     */
-    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw_bSisi4qn-PbAX07w_LXeefiqF9CzcNtukrdPc7wBLDdsGsRc4gHQTP92-bjAdbGtfQ/exec";
+/**
+* COMUNICAÇÃO HTTP COM O GOOGLE APPS SCRIPT
+*/
+const API = {
+  async call(action, payload = {}) {
+    if (!GAS_WEB_APP_URL || GAS_WEB_APP_URL.includes("COLE_AQUI")) {
+      UI.alerta("Erro: Insira a URL do seu Apps Script na variável GAS_WEB_APP_URL.", "danger");
+      return;
+    }
 
-    /**
-     * MÓDULO DE HIGIENIZAÇÃO DE DADOS (PROTEÇÃO ANTI-XSS)
-     */
-    const Security = {
-      escapeHTML(str) {
-        if (typeof str !== 'string') return '';
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-      }
-    };
-
-    /**
-     * GERENCIADOR DE SESSÃO LOCAL (EM MEMÓRIA)
-     */
-    const Session = {
-      getToken() {
-        return sessionStorage.getItem('SESS_TOKEN') || null;
-      },
-      setToken(token) {
-        if (token) sessionStorage.setItem('SESS_TOKEN', token);
-      },
-      clear() {
-        sessionStorage.removeItem('SESS_TOKEN');
-      }
-    };
-
-    /**
-     * COMUNICAÇÃO HTTP POST COM O GOOGLE APPS SCRIPT
-     */
-    const API = {
-      async call(action, payload = {}) {
-        if (!GAS_WEB_APP_URL || GAS_WEB_APP_URL.includes("COLE_AQUI")) {
-          UI.alerta("Erro: Insira a URL do seu Apps Script na variável GAS_WEB_APP_URL.", "danger");
-          return;
-        }
-
-        UI.loading(true);
-        try {
-          payload.action = action;
-          payload.sessionToken = Session.getToken();
-
-          // Utiliza text/plain para contornar restrições de CORS Pre-flight no Apps Script
-          const response = await fetch(GAS_WEB_APP_URL, {
-            method: "POST",
-            headers: {
-              "Content-Type": "text/plain;charset=utf-8"
-            },
-            body: JSON.stringify(payload)
-          });
-
-          const res = await response.json();
-          UI.loading(false);
-
-          if (!res.ok) {
-            throw new Error(res.erro || 'Ocorreu um erro no servidor.');
-          }
-          return res;
-        } catch (error) {
-          UI.loading(false);
-          UI.alerta(error.message, 'danger');
-          throw error;
-        }
-      }
-    };
-
-    /**
-     * CAMADA DE INTERFACE VISUAL
-     */
-    let modoRegistro = false;
-
-    const UI = {
-      loading(show) {
-        document.getElementById('loading').style.display = show ? 'flex' : 'none';
-      },
+    UI.loading(true);
+    try {
+      payload.action = action;
+      payload.sessionToken = Session.getToken();
       
-      alerta(mensagem, tipo = 'danger') {
-        const el = document.getElementById('global-alert');
-        el.className = `alert alert-${tipo}`;
-        el.textContent = mensagem;
-        el.style.display = 'block';
-        setTimeout(() => { el.style.display = 'none'; }, 6000);
-      },
+      // Utiliza text/plain para contornar restrições de CORS Pre-flight no Apps Script
+      const response = await fetch(GAS_WEB_APP_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(payload)
+      });
 
-      atualizarEstadoAuth() {
-        const token = Session.getToken();
-        document.getElementById('btn-login-view').style.display = token ? 'none' : 'block';
-        document.getElementById('btn-logout').style.display = token ? 'block' : 'none';
-      },
-
-      abrirModalAuth() {
-        document.getElementById('modal-auth').style.display = 'flex';
-      },
-
-      fecharModalAuth() {
-        document.getElementById('modal-auth').style.display = 'none';
-      },
-
-      alternarModoAuth(e) {
-        e.preventDefault();
-        modoRegistro = !modoRegistro;
-        document.getElementById('modal-title').textContent = modoRegistro ? 'Criar Nova Conta' : 'Entrar na Conta';
-        document.getElementById('group-nome').style.display = modoRegistro ? 'block' : 'none';
-        document.getElementById('toggle-auth-mode').textContent = modoRegistro ? 'Já tem conta? Faça login' : 'Não tem conta? Registe-se';
-      },
-
-      renderCatalogo(produtos) {
-        const grid = document.getElementById('catalogo-grid');
-        grid.innerHTML = '';
-
-        if (!produtos || produtos.length === 0) {
-          grid.innerHTML = '<p>Nenhum produto digital disponível no momento.</p>';
-          return;
-        }
-
-        produtos.forEach(prod => {
-          const card = document.createElement('div');
-          card.className = 'card';
-          
-          const imgUrl = prod.imagemUrl ? Security.escapeHTML(prod.imagemUrl) : 'https://via.placeholder.com/300x160?text=Produto+Digital';
-          const nome = Security.escapeHTML(prod.nome);
-          const desc = Security.escapeHTML(prod.descricao);
-          const id = Security.escapeHTML(prod.produtoId);
-          const preco = Number(prod.preco).toFixed(2);
-
-          card.innerHTML = `
-            <img src="${imgUrl}" alt="${nome}" loading="lazy">
-            <h3>${nome}</h3>
-            <p>${desc}</p>
-            <div class="price">${preco} MT</div>
-            <button class="btn" onclick="App.comprar('${id}')">Adquirir Produto</button>
-          `;
-          
-          grid.appendChild(card);
-        });
+      const res = await response.json();
+      UI.loading(false);
+      
+      if (!res.ok) {
+        throw new Error(res.erro || 'Ocorreu um erro no servidor.');
       }
-    };
+      return res;
+    } catch (error) {
+      UI.loading(false);
+      UI.alerta(error.message, 'danger');
+      throw error;
+    }
+  }
+};
 
-    /**
-     * CONTROLADOR DE LÓGICA DO CLIENTE
-     */
-    const App = {
-      async init() {
-        UI.atualizarEstadoAuth();
-        await App.carregarCatalogo();
-      },
+/**
+* CAMADA DE INTERFACE VISUAL
+*/
+let modoRegistro = false;
 
-      async carregarCatalogo() {
-        UI.loading(true);
-        try {
-          // Utiliza GET especificamente para carregar o catálogo sem dar erro no doPost
-          const response = await fetch(`${GAS_WEB_APP_URL}?action=catalogo`);
-          const res = await response.json();
-          UI.loading(false);
+const UI = {
+  loading(show) {
+    document.getElementById('loading').style.display = show ? 'flex' : 'none';
+  },
+  alerta(mensagem, tipo = 'danger') {
+    const el = document.getElementById('global-alert');
+    el.className = `alert alert-${tipo}`;
+    el.textContent = mensagem;
+    el.style.display = 'block';
+    setTimeout(() => { el.style.display = 'none'; }, 6000);
+  },
+  atualizarEstadoAuth() {
+    const token = Session.getToken();
+    document.getElementById('btn-login-view').style.display = token ? 'none' : 'block';
+    document.getElementById('btn-logout').style.display = token ? 'block' : 'none';
+  },
+  abrirModalAuth() {
+    document.getElementById('modal-auth').style.display = 'flex';
+  },
+  fecharModalAuth() {
+    document.getElementById('modal-auth').style.display = 'none';
+  },
+  alternarModoAuth(e) {
+    e.preventDefault();
+    modoRegistro = !modoRegistro;
+    document.getElementById('modal-title').textContent = modoRegistro ? 'Criar Nova Conta' : 'Entrar na Conta';
+    document.getElementById('group-nome').style.display = modoRegistro ? 'block' : 'none';
+    document.getElementById('toggle-auth-mode').textContent = modoRegistro ? 'Já tem conta? Faça login' : 'Não tem conta? Registe-se';
+  },
+  renderCatalogo(produtos) {
+    const grid = document.getElementById('catalogo-grid');
+    grid.innerHTML = '';
+    
+    if (!produtos || produtos.length === 0) {
+      grid.innerHTML = '<p>Nenhum produto digital disponível no momento.</p>';
+      return;
+    }
 
-          if (res.ok) {
-            UI.renderCatalogo(res.produtos);
-          } else {
-            UI.alerta(res.erro || 'Falha ao carregar catálogo de produtos.', 'danger');
-          }
-        } catch (e) {
-          UI.loading(false);
-          console.error('Falha ao carregar o catálogo:', e);
-          UI.alerta('Erro ao conectar ao servidor do catálogo.', 'danger');
-        }
-      },
+    produtos.forEach(prod => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      const imgUrl = prod.imagemUrl ? Security.escapeHTML(prod.imagemUrl) : 'https://via.placeholder.com/300x160?text=Produto+Digital';
+      const nome = Security.escapeHTML(prod.nome);
+      const desc = Security.escapeHTML(prod.descricao);
+      const id = Security.escapeHTML(prod.produtoId);
+      const preco = Number(prod.preco).toFixed(2);
 
-      async submeterAuth(e) {
-        e.preventDefault();
-        const contacto = document.getElementById('auth-contacto').value;
-        const email = document.getElementById('auth-email').value;
-        const pin = document.getElementById('auth-pin').value;
-
-        try {
-          if (modoRegistro) {
-            const nome = document.getElementById('auth-nome').value;
-            const res = await API.call('registarUtilizador', { nome, contacto, email, pin });
-            UI.fecharModalAuth();
-            UI.alerta(res.mensagem || 'Registo efetuado com sucesso!', 'success');
-          } else {
-            const res = await API.call('login', { contacto, email, pin });
-            Session.setToken(res.sessionToken);
-            UI.fecharModalAuth();
-            UI.atualizarEstadoAuth();
-            UI.alerta('Autenticado com sucesso!', 'success');
-          }
-        } catch (err) {
-          // Erros já exibidos pela API.call
-        }
-      },
-
-      async comprar(produtoId) {
-        if (!Session.getToken()) {
-          UI.alerta('Por favor, faça login para efetuar compras.', 'danger');
-          UI.abrirModalAuth();
-          return;
-        }
-
-        try {
-          const res = await API.call('criarPagamento', { produtoId: produtoId, metodo: 'mpesa' });
-          
-          if (res && res.checkoutUrl) {
-            window.location.href = res.checkoutUrl;
-          } else if (res) {
-            UI.alerta(`Pagamento iniciado! ID da Venda: ${res.vendaId}`, 'success');
-          }
-        } catch (e) {
-          // Trata exceções do checkout
-        }
-      },
-
-      async logout() {
-        try {
-          await API.call('logout');
-        } catch (e) {
-          // Limpa sessão local em caso de falha de conexão
-        } finally {
-          Session.clear();
-          UI.atualizarEstadoAuth();
-          UI.alerta('Sessão encerrada.', 'success');
-        }
-      }
-    };
-
-    // Inicialização da aplicação
-    document.addEventListener('DOMContentLoaded', () => {
-      App.init();
+      card.innerHTML = `
+        <img src="${imgUrl}" alt="${nome}" loading="lazy">
+        <h3>${nome}</h3>
+        <p>${desc}</p>
+        <div class="price">${preco} MT</div>
+        <button class="btn" onclick="App.comprar('${id}')">Adquirir Produto</button>
+      `;
+      grid.appendChild(card);
     });
-  </script>
+  }
+};
+
+/**
+* CONTROLADOR DE LÓGICA DO CLIENTE
+*/
+const App = {
+  async init() {
+    UI.atualizarEstadoAuth();
+    await App.carregarCatalogo();
+  },
+  async carregarCatalogo() {
+    try {
+      const res = await API.call('catalogo');
+      if (res) UI.renderCatalogo(res.produtos);
+    } catch (e) {
+      console.error('Falha ao carregar o catálogo:', e);
+    }
+  },
+  async submeterAuth(e) {
+    e.preventDefault();
+    const contacto = document.getElementById('auth-contacto').value;
+    const email = document.getElementById('auth-email').value;
+    const pin = document.getElementById('auth-pin').value;
+
+    try {
+      if (modoRegistro) {
+        const nome = document.getElementById('auth-nome').value;
+        const res = await API.call('registarUtilizador', { nome, contacto, email, pin });
+        UI.fecharModalAuth();
+        UI.alerta(res.mensagem || 'Registo efetuado com sucesso!', 'success');
+      } else {
+        const res = await API.call('login', { contacto, email, pin });
+        Session.setToken(res.sessionToken);
+        UI.fecharModalAuth();
+        UI.atualizarEstadoAuth();
+        UI.alerta('Autenticado com sucesso!', 'success');
+      }
+    } catch (err) {
+      // Erros já tratados pela API.call
+    }
+  },
+  async comprar(produtoId) {
+    if (!Session.getToken()) {
+      UI.alerta('Por favor, faça login para efetuar compras.', 'danger');
+      UI.abrirModalAuth();
+      return;
+    }
+
+    try {
+      const res = await API.call('criarPagamento', { produtoId: produtoId, metodo: 'mpesa' });
+      if (res && res.checkoutUrl) {
+        window.location.href = res.checkoutUrl;
+      } else if (res) {
+        UI.alerta(`Pagamento iniciado! ID da Venda: ${res.vendaId}`, 'success');
+      }
+    } catch (e) {
+      // Trata exceções do checkout
+    }
+  },
+  async logout() {
+    try {
+      await API.call('logout');
+    } catch (e) {
+      // Limpa sessão local em caso de erro na rede
+    } finally {
+      Session.clear();
+      UI.atualizarEstadoAuth();
+      UI.alerta('Sessão encerrada.', 'success');
+    }
+  }
+};
+
+// Inicialização da aplicação
+document.addEventListener('DOMContentLoaded', () => {
+  App.init();
+});
+</script>
 </body>
 </html>
